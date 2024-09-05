@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('revenue', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('student_id')->constrained()->onDelete('Cascaded');
+            $table->
             $table->timestamps();
         });
     }
