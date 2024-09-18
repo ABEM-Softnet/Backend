@@ -37,7 +37,10 @@ class SessionController extends Controller
             'password'=> $request->password,
         ]);
 
-        event(new Registered($user));
+        dispatch(function() use($user){
+            event(new Registered($user));
+        });
+
 
         $adminRoleApi = Role::where('name', 'school admin')->where('guard_name', 'api')->first();
         $adminRoleWeb = Role::where('name', 'school admin')->where( 'guard_name', 'web')->first();
