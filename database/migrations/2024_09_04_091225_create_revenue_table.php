@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('revenue', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained()->onDelete('Cascaded');
-            $table->
+            $table->decimal('amount');
+            $table->enum('type', ['registration_fee', 'monthly_fee', 'exam_fee']);
+            $table->enum('payment_method', ['cash', 'digital_payment']);
+            $table->date('date');
+            $table->unsignedBigInteger('branch_id');
+            $table->foreign('branch_id')->references('id')->on('branches');
             $table->timestamps();
         });
     }
