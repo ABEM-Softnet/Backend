@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
@@ -38,8 +40,11 @@ class SessionController extends Controller
         ]);
 
         dispatch(function() use($user){
+            Log::info('Dispatching Registered event for user: ' . $user->email);
             event(new Registered($user));
         });
+
+        Mail::to($user->email)->queue(new WelcomeMail($user, $request->password, config('app.frontend_url')));
 
 
         $adminRoleApi = Role::where('name', 'school admin')->where('guard_name', 'api')->first();
