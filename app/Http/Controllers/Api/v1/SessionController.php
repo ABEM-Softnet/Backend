@@ -40,8 +40,10 @@ class SessionController extends Controller
         event(new Registered($user));
 
         $adminRoleApi = Role::where('name', 'school admin')->where('guard_name', 'api')->first();
+        $adminRoleWeb = Role::where('name', 'school admin')->where( 'guard_name', 'web')->first();
 
         $user->assignRole($adminRoleApi);
+        $user->assignRole($adminRoleWeb);
 
         return response()->json([
             'status' => true,
@@ -79,8 +81,10 @@ class SessionController extends Controller
         event(new Registered($user));
 
         $adminRoleApi = Role::where('name', 'teacher')->where('guard_name', 'api')->first();
+        $adminRoleWeb = Role::where('name', 'school admin')->where( 'guard_name', 'web')->first();
 
         $user->assignRole($adminRoleApi);
+        $user->assignRole($adminRoleWeb);
 
         return response()->json([
             'status' => true,
