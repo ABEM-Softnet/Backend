@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\EmailVerificationController;
 use App\Http\Controllers\Api\v1\NewPasswordController;
+use App\Http\Controllers\Api\v1\SchoolController;
 use App\Http\Controllers\Api\v1\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Route::get('/', function(){
+//     return 'hi';
+// });
 
 Route::post('/admin-register', [SessionController::class, 'adminRegister']);
 
@@ -39,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
     Route::post('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
+
+
 });
 
 
@@ -48,7 +55,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function(){
-
+    Route::resource('schools', SchoolController::class);
 });
 
 

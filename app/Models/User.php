@@ -53,4 +53,8 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification
         ($url));
     }
+
+    public function schoolLeaders(){
+        return $this->hasMany(SchoolLeader::class);
+    }
 }
