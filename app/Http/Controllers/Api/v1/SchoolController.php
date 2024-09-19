@@ -6,13 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\SchoolCollection;
 use App\Http\Resources\Api\SchoolResource;
 use App\Models\School;
-
 use Illuminate\Http\Request;
 
 class SchoolController extends Controller
 {
-
-    //
     /**
      * Display a listing of the resource.
      */
@@ -78,5 +75,4 @@ class SchoolController extends Controller
     {
         //
     }
-
 }

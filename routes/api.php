@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\v1\EmailVerificationController;
+use App\Http\Controllers\Api\v1\NewPasswordController;
+use App\Http\Controllers\Api\v1\SchoolController;
+use App\Http\Controllers\Api\v1\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\ExpenseController;
@@ -12,10 +16,16 @@ use App\Http\Controllers\Api\v1\FinancialController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+// Route::get('/', function(){
+//     return 'hi';
+// });
+
+use App\Models\Student;
 
 Route::get('/students', function () {
     return Student::with('branch')->get();
@@ -52,10 +62,6 @@ Route::middleware('auth:sanctum')->group(function(){
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/test', function () {
-    return response()->json(['message' => 'This is a test route'], 200);
-});
-
 Route::prefix('v1')->group(function () {
     Route::get('/revenue/total', [RevenueController::class, 'getTotalRevenue']);
     Route::get('/revenue/today', [RevenueController::class, 'getTodayRevenue']);
@@ -78,3 +84,9 @@ Route::prefix('v1')->group(function () {
     //shows list of branches, their total expense and revenue
     Route::get('/financials/total', [FinancialController::class, 'getAllBranchFinancials']);
 });
+
+Route::middleware(['auth:sanctum'])->prefix('v1')->group(function(){
+    Route::resource('schools', SchoolController::class);
+});
+
+
