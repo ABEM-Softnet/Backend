@@ -12,9 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Branch extends Model
 {
     use HasFactory;
-    protected $fillable = [
-        // Add any fillable fields here
-    ];
+
 
     public function school(){
         return $this->belongsTo(School::class);
