@@ -25,14 +25,14 @@ class ExpenseController extends Controller
 
     public function getTotalExpenses(Request $request)
     {
-        // Get total expenses for the current week
+        // Get total expenses for the school
         $totalExpense = Expense::with('date')->sum('amount');
         
         return response()->json(['total_expense' => $totalExpense]);
     }
     public function getTodayExpenses(Request $request)
     {
-        // Get total expenses for the current week
+        // Get total expenses of today
         $totalExpense = Expense::whereDay('date', now()->day)->sum('amount');
         
         return response()->json(['today_expense' => $totalExpense]);
@@ -49,17 +49,33 @@ class ExpenseController extends Controller
     }
     public function getThisMonthExpenses(Request $request)
     {
-        // Get total expenses for the current week
-        $totalExpense = Expense::whereWeek('date', now()->month)->sum('amount');
+        // Get total expenses for the current month
+        $totalExpense = Expense::whereMonth('date', now()->month)->sum('amount');
         
-        return response()->json(['this_week_expense' => $totalExpense]);
+        return response()->json(['this_month_expense' => $totalExpense]);
     }
     public function getThisYearExpenses(Request $request)
     {
-        // Get total expenses for the current week
-        $totalExpense = Expense::whereBetween('date', [now()->startOfWeek(), now()->endOfWeek()])->sum('amount');
+        // Get total expenses for the this year
+        $totalExpense = Expense::whereYear('date', now()->year)->sum('amount');
         
-        return response()->json(['this_week_expense' => $totalExpense]);
+        return response()->json(['this_year_expense' => $totalExpense]);
+    }
+
+    
+    public function getRevenueByMonthYear(Request $request)
+    {
+        // Get total expenses for the input month and year
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+
+        $totalExpense = Expense::whereBetween('date', [$startDate, $endDate])->sum('amount');
+        
+        return response()->json(['this_monthYear_total_expense' => $totalExpense]);
     }
 
     public function getExpenseByTypeAndTime(Request $request)
