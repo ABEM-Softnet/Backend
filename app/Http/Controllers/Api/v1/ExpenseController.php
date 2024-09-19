@@ -1,34 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
 
+use App\Http\Controllers\Controller;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class ExpenseController extends Controller
 {
-    public function index()
-    {
-        // Retrieve all expense entries
-        $expenses = Expense::all();
-        return response()->json($expenses);
-    }
-
-    public function store(Request $request)
-    {
-        // Create a new expense entry
-        $expense = Expense::create($request->all());
-        return response()->json($expense, 201);
-    }
-
     public function getTotalExpenses(Request $request)
     {
-        // Get total expenses for the school
-        $totalExpense = Expense::with('date')->sum('amount');
-        
-        return response()->json(['total_expense' => $totalExpense]);
+        $currentYear = date('Y');
+    
+        // Retrieve expenses with type, amount, branch name, and date, filtered by the current year and ordered by date
+        $expenses = Expense::with('branch')
+                            ->select('type', 'amount', 'date', 'branch_id')
+                            ->whereYear('date', $currentYear)
+                            ->orderBy('date')
+                            ->get();
+    
+        $expensesByType = [];
+    
+        foreach ($expenses as $expense) {
+            $expenseType = $expense->type;
+            $amount = (float) $expense->amount;
+            $month = date('F', strtotime($expense->date)); // Extract month as a full month name
+    
+            // Safely get the branch name using optional() to prevent errors if branch is null
+            $branchName = optional($expense->branch)->name;
+    
+            // Group expenses by type with month and include the branch name
+            if (!isset($expensesByType[$expenseType])) {
+                $expensesByType[$expenseType] = [];
+            }
+    
+            $expensesByType[$expenseType][] = [
+                'month' => $month,
+                'amount' => $amount,
+                'branch' => $branchName
+            ];
+        }
+    
+        return response()->json(['expenses' => $expensesByType]);
     }
     public function getTodayExpenses(Request $request)
     {
@@ -63,7 +78,7 @@ class ExpenseController extends Controller
     }
 
     
-    public function getRevenueByMonthYear(Request $request)
+    public function getExpensesByMonthYear(Request $request)
     {
         // Get total expenses for the input month and year
         $month = $request->input('month');

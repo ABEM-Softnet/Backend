@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('revenue', function (Blueprint $table) {
             $table->id();
             $table->decimal('amount');
-            $table->enum('type',['teachers_wage','materials']);
+            $table->enum('type', ['registration_fee', 'monthly_fee', 'exam_fee']);
+            $table->enum('payment_method', ['cash', 'digital_payment']);
             $table->date('date');
             $table->unsignedBigInteger('branch_id');
             $table->foreign('branch_id')->references('id')->on('branches');
+            $table->unsignedBigInteger('school_id');
+            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('revenue');
     }
 };

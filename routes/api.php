@@ -2,9 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RevenueController;
-use App\Http\Controllers\FinancialController;
-use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\Api\v1\ExpenseController;
+use App\Http\Controllers\Api\v1\RevenueController;
+use App\Http\Controllers\Api\v1\FinancialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,10 +37,12 @@ Route::prefix('v1')->group(function () {
     Route::get('/expenses/this-week', [ExpenseController::class, 'getThisWeekExpenses']);
     Route::get('/expenses/this-month', [ExpenseController::class, 'getThisMonthExpenses']);
     Route::get('/expenses/this-year', [ExpenseController::class, 'getThisYearExpenses']);
+    Route::get('/expenses/by-monthYear', [ExpenseController::class, 'getExpensesByMonthYear']);
+    Route::get('/expenses/by-typeTime', [ExpenseController::class, 'getExpenseByTypeAndTime']);
 
-    Route::get('/branch/{branch_id}/revenue', [RevenueController::class, 'getBranchRevenue']);
-    Route::get('/branch/{branch_id}/expenses', [ExpenseController::class, 'getBranchExpenses']);
-
-    Route::get('/branch/{branch_id}/financials', [FinancialController::class, 'getBranchFinancials']);
-    Route::get('/financials/total', [FinancialController::class, 'getTotalFinancials']);
+    //get specific branch revenue and expenses
+    Route::get('/financials/{school_id}/branch/{branchId?}', [RevenueController::class, 'getRevenueForBranchOrSchool']);
+    
+    //shows list of branches, their total expense and revenue
+    Route::get('/financials/total', [FinancialController::class, 'getAllBranchFinancials']);
 });
