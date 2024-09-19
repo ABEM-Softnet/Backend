@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\School;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(School::class);
+            $table->foreignIdFor(GradeDivision::class);
             $table->string('name');
             $table->string('location');
-            $table->unsignedBigInteger('school_id')->nullable();
-            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });
     }

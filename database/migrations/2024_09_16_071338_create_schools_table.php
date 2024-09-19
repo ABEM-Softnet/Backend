@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            // $table->foreignIdFor(SchoolLeader::class);
+            $table->string('address');
+            $table->string('email');
+            $table->string('website');
+            $table->string('phone_no');
             $table->timestamps();
         });
     }
