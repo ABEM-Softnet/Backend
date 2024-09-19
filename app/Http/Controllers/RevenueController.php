@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use Illuminate\Http\Request;
-use App\Models\Revenue;
-use App\Models\School;
 use App\Models\Branch;
+use App\Models\School;
+use App\Models\Revenue;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Log;
 
 class RevenueController extends Controller
 {
@@ -27,11 +29,56 @@ class RevenueController extends Controller
     public function getTotalRevenue(Request $request)
     {
         // Get total revenue for the current month
-        $totalRevenue = Revenue::whereMonth('date', now()->month)->sum('amount');
+        $totalRevenue = Revenue::with('date')->sum('amount');
         
         return response()->json(['total_revenue' => $totalRevenue]);
     }
 
+    public function getThisYearRevenue(Request $request)
+    {
+        // Get total revenue for the current year
+        $totalRevenue = Revenue::whereYear('date', now()->year)->sum('amount');
+        
+        return response()->json(['this_year_revenue' => $totalRevenue]);
+    }
+    public function getThisMonthRevenue(Request $request)
+    {
+        // Get total revenue for the current month
+        $totalRevenue = Revenue::whereMonth('date', now()->month)->sum('amount');
+        
+        return response()->json(['this_month_revenue' => $totalRevenue]);
+    }
+    public function getThisWeekRevenue(Request $request)
+    {
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+
+        // Get total revenue for the current week
+        $totalRevenue = Revenue::whereBetween('date', [$startOfWeek, $endOfWeek])->sum('amount');
+        
+        return response()->json(['this_week_revenue' => $totalRevenue]);
+}
+    public function getTodayRevenue(Request $request)
+    {
+        // Get total revenue for the current month
+        $totalRevenue = Revenue::whereDay('date', now()->day)->sum('amount');
+        
+        return response()->json(['today_revenue' => $totalRevenue]);
+    }
+
+    public function getRevenueByMonthYear(Request $request)
+    {
+        $month = $request->input('month');
+        $year = $request->input('year');
+
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+
+        $totalRevenue = Revenue::whereBetween('date', [$startDate, $endDate])->sum('amount');
+        
+        return response()->json(['revenue' => $totalRevenue]);
+    }
     public function getRevenueForBranchOrSchool(Request $request, $schoolId, $branchId = null)
     {
         $school = School::findOrFail($schoolId);

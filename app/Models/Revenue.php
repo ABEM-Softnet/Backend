@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Revenue extends Model
 {
     use HasFactory;
+
+    protected $table = 'revenue';
     protected $fillable = [
         'amount', 'type', 'payment_method', 'date', 'branch_id',
     ];
@@ -17,4 +19,5 @@ class Revenue extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+    
 }

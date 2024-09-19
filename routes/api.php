@@ -20,6 +20,9 @@ use App\Http\Controllers\ExpenseController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('/test', function () {
+    return response()->json(['message' => 'This is a test route'], 200);
+});
 
 Route::prefix('v1')->group(function () {
     Route::get('/revenue/total', [RevenueController::class, 'getTotalRevenue']);
@@ -27,6 +30,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/revenue/this-week', [RevenueController::class, 'getThisWeekRevenue']);
     Route::get('/revenue/this-month', [RevenueController::class, 'getThisMonthRevenue']);
     Route::get('/revenue/this-year', [RevenueController::class, 'getThisYearRevenue']);
+    Route::get('/revenue/by-monthYear', [RevenueController::class, 'getRevenueByMonthYear']);
 
     Route::get('/expenses/total', [ExpenseController::class, 'getTotalExpenses']);
     Route::get('/expenses/today', [ExpenseController::class, 'getTodayExpenses']);
