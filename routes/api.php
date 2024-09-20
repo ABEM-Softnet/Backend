@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\ExpenseController;
 use App\Http\Controllers\Api\v1\RevenueController;
 use App\Http\Controllers\Api\v1\FinancialController;
+use App\Http\Controllers\Api\v1\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,9 +28,6 @@ use App\Http\Controllers\Api\v1\FinancialController;
 
 use App\Models\Student;
 
-Route::get('/students', function () {
-    return Student::with('branch')->get();
-});
 
 
 Route::post('/admin-register', [SessionController::class, 'adminRegister']);
@@ -54,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('email/verification-notification', [EmailVerificationController::class, 'sendVerificationEmail']);
     Route::post('verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])->name('verification.verify');
-
+    
 
 });
 
@@ -69,7 +67,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/revenue/this-month', [RevenueController::class, 'getThisMonthRevenue']);
     Route::get('/revenue/this-year', [RevenueController::class, 'getThisYearRevenue']);
     Route::get('/revenue/by-monthYear', [RevenueController::class, 'getRevenueByMonthYear']);
-
+    
     Route::get('/expenses/total', [ExpenseController::class, 'getTotalExpenses']);
     Route::get('/expenses/today', [ExpenseController::class, 'getTodayExpenses']);
     Route::get('/expenses/this-week', [ExpenseController::class, 'getThisWeekExpenses']);
@@ -88,3 +86,16 @@ Route::prefix('v1')->group(function () {
 Route::middleware(['auth:sanctum'])->prefix('v1')->group(function(){
     Route::resource('schools', SchoolController::class);
 });
+
+// students related routes
+
+Route::prefix('v1')->group(function () {
+    Route::get('students', [StudentController::class, 'index']);
+    Route::post('students', [StudentController::class, 'store']);
+    Route::get('students/{id}', [StudentController::class, 'show']);
+    Route::put('students/{id}', [StudentController::class, 'update']);
+    Route::delete('students/{id}', [StudentController::class, 'destroy']);
+    Route::get('students/{id}/summary', [StudentController::class, 'getStudentSummary']);
+});
+    
+

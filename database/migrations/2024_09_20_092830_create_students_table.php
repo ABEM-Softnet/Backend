@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
 use App\Models\Branch;
 
 return new class extends Migration
@@ -21,7 +20,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('days_present_this_month');
             $table->unsignedTinyInteger('days_present_this_week');
             $table->boolean('is_newcomer');
-            $table->foreignIdFor(Branch::class); // Foreign key to Branch
+            $table->foreignIdFor(Branch::class)->constrained()->onDelete('cascade'); // Foreign key with constraint
             $table->timestamps();
         });
     }
