@@ -23,10 +23,9 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate and create a new student
         $validatedData = $request->validate([
             'full_name' => 'required|string|max:255',
-            'grade' => 'required|integer|between:1,12', // Correct usage
+            'grade' => 'required|integer|between:1,12',
             'section' => 'required|string|max:1',
             'score' => 'required|numeric|min:0|max:100',
             'total_days_present' => 'required|integer|min:0',
@@ -59,7 +58,7 @@ class StudentController extends Controller
     {
         $request->validate([
             'full_name' => 'required|string|max:255',
-            'grade' => 'required|integer|between:1,12', // Corrected line
+            'grade' => 'required|integer|between:1,12', 
             'section' => 'required|string|max:1',
             'score' => 'required|numeric|between:0,100',
             'total_days_present' => 'required|integer',
@@ -67,7 +66,7 @@ class StudentController extends Controller
             'days_present_this_month' => 'required|integer',
             'days_present_this_week' => 'required|integer',
             'is_newcomer' => 'required|boolean',
-            'branch_id' => 'required|exists:branches,id', // Assuming you have a branches table
+            'branch_id' => 'required|exists:branches,id', 
         ]);
     
         $student = Student::findOrFail($id);
