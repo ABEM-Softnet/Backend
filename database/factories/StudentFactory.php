@@ -32,7 +32,7 @@ class StudentFactory extends Factory
             'days_present_this_month' => $this->faker->numberBetween(0, 30),
             'days_present_this_week' => $this->faker->numberBetween(0, 7),
             'is_newcomer' => $this->faker->boolean,
-            'branch_id' => Branch::inRandomOrder()->first()->id, // Reference an existing Branch
+            'branch_id' => Branch::inRandomOrder()->first()->id, 
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Student;
 use App\Http\Controllers\Api\v1\EmailVerificationController;
 use App\Http\Controllers\Api\v1\NewPasswordController;
 use App\Http\Controllers\Api\v1\SchoolController;
@@ -21,12 +22,6 @@ use App\Http\Controllers\Api\v1\StudentController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-// Route::get('/', function(){
-//     return 'hi';
-// });
-
-use App\Models\Student;
 
 
 
