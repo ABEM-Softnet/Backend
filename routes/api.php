@@ -22,6 +22,13 @@ use Illuminate\Support\Facades\Route;
 //     return 'hi';
 // });
 
+use App\Models\Student;
+
+Route::get('/students', function () {
+    return Student::with('branch')->get();
+});
+
+
 Route::post('/admin-register', [SessionController::class, 'adminRegister']);
 
 Route::post('/login', [SessionController::class, 'login']);
